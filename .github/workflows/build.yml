@@ -1,12 +1,9 @@
-name: Build
+name: Build and Deploy
 
 on:
   push:
     branches: [ "master" ]
   workflow_dispatch:
-
-permissions:
-  contents: write
 
 jobs:
   build:
@@ -14,10 +11,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
       - uses: actions/setup-node@v4.4.0
-        with: { node-version: 22.15.0 }
+        with:
+          node-version: 22.15.0
       - run: npm install
       - run: mkdir -p public && cp -r $(ls -A | grep -v "public" | grep -v ".gitignore") public/
-      - uses: JamesIves/github-pages-deploy-action@v4.7.3
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3.0.1
         with:
-          branch: gh-pages
-          folder: public
+          path: ./public
+
+  deploy:
+    needs: build
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4.0.5
