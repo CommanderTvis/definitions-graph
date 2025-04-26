@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-node@v4.4.0
         with: { node-version: 22.15.0 }
       - run: npm install
-      - run: cp -r * public/
+      - run: mkdir -p public && cp -r * public/
       - uses: JamesIves/github-pages-deploy-action@v4.7.3
         with:
           branch: gh-pages
