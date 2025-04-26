@@ -1,0 +1,8 @@
+{
+  "name": "definitions-graph-dyn",
+  "dependencies": {
+    "split.js": "^1.6.5",
+    "svg-pan-zoom": "^3.6.2",
+    "viz.js": "^2.1.2"
+  }
+}
